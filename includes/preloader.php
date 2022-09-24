@@ -1,0 +1,3 @@
+<div class="preloader flex-column justify-content-center align-items-center">
+  <img class="animation__shake" src="assets/img/logo2.png" alt="RCCG Logo" height="105" width="105">Loading.....
+</div>
