@@ -76,22 +76,109 @@ if (isset($_POST['updateRec'])) {
                       </div>
                       <form method="post" target="">
                         <div class="row">
-                          <div class="col-sm-8">
-                            <div class="card-body">
-                              <div class="form-group">
-                                <label for="guestName">Guest</label>
-                                <input type="text" class="form-control" name="guestName" id="guestName" placeholder="Enter GuestName" required>                                
-                              </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <label for="guestVisitDate">Date as Guest</label>
+                              <input type="date" class="form-control" name="guestVisitDate" id="guestVisitDate" value="<?php echo getToday(); ?>" required>                                
                             </div>
                           </div>
                           <div class="col-sm-4">
-                            <div class="card-body">
-                              <div class="form-group">
-                                <button type="submit" id="saveNew" name="saveNew" class="btn btn-success float-right">Create Guest</button>
-                              </div>
+                            <div class="form-group">
+                              <label for="guestFirstName">Guest FirstName</label>
+                              <input type="text" class="form-control" name="guestFirstName" id="guestFirstName" placeholder="Guest FirstName" required>                                
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <label for="guestLastName">Guest Surname</label>
+                              <input type="text" class="form-control" name="guestLastName" id="guestLastName" placeholder="Guest Surname" required>                                
                             </div>
                           </div>
                         </div>
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <label for="guestGender">Guest Sex</label>
+                            <div class="form-group">
+                              <select class="form-control" id="guestGender" name="guestGender">
+                              <option value="Male">Male</option>
+                                <option value="Female" selected>Female</option>
+                              </select>                                              
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <label for="guestLastName">Resident in Abuja?</label>
+                            <div class="form-group">
+                              <select class="form-control" id="guestResident" name="guestResident">
+                                <option value="yes" selected>Yes</option>
+                                <option value="no">No</option>
+                              </select>                            
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <label for="guestMembership">Member of RCCG?</label>
+                            <div class="form-group">
+                              <select class="form-control" id="guestMembership" name="guestMembership">
+                                <option value="yes" selected>Yes</option>
+                                <option value="no">No</option>
+                              </select>                                                            
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <label for="guestAgeRange">Age Range</label>
+                            <div class="form-group">
+                              <select class="form-control" id="guestAgeRange" name="guestAgeRange">
+                                <option value="13-20">13-20</option>
+                                <option value="21-40" selected>21-40</option>
+                                <option value="41-50">41-50</option>
+                                <option value="50+">50+</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <label for="guestPhone">Guest Mobilenumber</label>
+                              <input type="text" class="form-control" name="guestPhone" id="guestPhone" placeholder="Guest PhoneNumber" required>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <label for="guestEmail">Guest email</label>
+                              <input type="text" class="form-control" name="guestEmail" id="guestEmail" placeholder="Guest email" required>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <label for="guestOccupation">Guest Occupation</label>
+                              <input type="text" class="form-control" name="guestOccupation" id="guestOccupation" placeholder="Guest Occupation">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label for="guestHomeAddress">Guest Home Address</label>
+                              <textarea class="form-control" rows="5" name="guestHomeAddress" id="guestHomeAddress" required>What's you Home Address?</textarea>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label for="guestServiceReport">Tell us about the Service</label>
+                              <textarea class="form-control" rows="5" name="guestServiceReport" id="guestServiceReport" spellcheck="true">Which segment of the service did you enjoy most?</textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-8">
+
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                                <button type="submit" id="newRec" name="newRec" class="btn btn-success float-right">Save Guest</button>
+                              </div>
+                          </div>
+                        </div>                        
                       </form>
                     </div>
                   </div>
@@ -406,6 +493,12 @@ function userDetails()
   }
 
   return $rtn;
+}
+
+function getToday()
+{
+  $dt=new DateTime('now');
+  return $dt->format('Y-m-d'); 
 }
 
 ?>
