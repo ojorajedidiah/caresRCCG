@@ -1,4 +1,4 @@
-<?php include('includes/header.php'); ?>
+<?php include_once('includes/header.php'); ?>
 <?php
 //session_start();
 $_SESSION['usersErr']='';

@@ -2,6 +2,7 @@
     include('error_handler.php');
     include('models/databaseConnection.class.php');
     $_SESSION['activePage']=basename($_SERVER['REQUEST_URI']);
+    session_start();
     
     //include('includes/auditLogs.php');
     
