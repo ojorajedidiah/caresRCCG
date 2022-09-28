@@ -44,10 +44,10 @@ class connectDatabase
         $dbHost = array_shift($conParameters);
         $this->connection_status = $this->connectMySQL($dbHost, $conParameters);
       } else {
-        $this->connection_status = "Invalid Connection Parameters passed!";
+        $this->connectionError = "Invalid Connection Parameters passed!";
       }
     } else {
-      $this->connection_status = "Invalid Connection Parameters passed!";
+      $this->connectionError = "Invalid Connection Parameters passed!";
     }
   }
 
@@ -96,6 +96,11 @@ class connectDatabase
   {
     $this->dbConnect = null;
     return true;
+  }
+
+  function getErrorMessage()
+  {
+    return $this->connectionError;
   }
 
   //this returns the current connection Error if there exist any

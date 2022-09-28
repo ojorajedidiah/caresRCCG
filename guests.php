@@ -1,24 +1,43 @@
 <?php include('includes/header.php'); ?>
 <?php
 session_start();
+$_SESSION['guestErr']='';
 $errGuest = '';
-if (isset($_POST['saveNew'])) {
+if (isset($_REQUEST['saveRec'])) {
   if (canSave()) {
     $errGuest = createNewGuest();
+    $_REQUEST['p'] = "update";
+  } else {
+    $errGuest=$_SESSION['guestErr'];
+    $_REQUEST['p'] = "new";
   }
-  $_REQUEST['p'] = "update";
+  
 }
 
 if (isset($_POST['updateRec'])) {
   if (canSaveEdit()) {
     $errGuest = UpdateGuest();
+    $_REQUEST['p'] = "update";
+  }else {
+    $errGuest=$_SESSION['guestErr'];
+    $_REQUEST['p'] = "edit";
   }
-  $_REQUEST['p'] = "update";
+  
+}
+
+if (isset($_POST['promoteRec'])) {
+  // if (canSaveEdit()) {
+  //   $errGuest = UpdateGuest();
+  //   $_REQUEST['p'] = "update";
+  // }else {
+  //   $errGuest=$_SESSION['guestErr'];
+  //   $_REQUEST['p'] = "edit";
+  // }  
 }
 ?>
 <style>
-  #users.tbody th,
-  #users tbody td {
+  #guests.tbody th,
+  #guests tbody td {
     height: 5px;
   }
 </style>
@@ -53,13 +72,11 @@ if (isset($_POST['updateRec'])) {
               <div class="card card-outline card-primary">
                 <div class="card-header">
                   <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                       <h5>Guest Management</h5>
-                      <?php if ($errGuest != '') {
-                        echo '<span style="color:red;font-size:15px;">' . $errGuest . '</span>';
-                      } ?>
+                      <?php if ($errGuest != '') { echo '<span style="color:red;font-size:15px;">' . $errGuest . '</span>'; } ?>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                       <?php if (isset($_REQUEST['p']) && ($_REQUEST['p'] == 'new' || $_REQUEST['p'] == 'edit' || $_REQUEST['p'] == 'promote')) { ?>
                         <a href="guests.php" class="btn btn-danger float-right">Back</a>
                       <?php } else { ?>
@@ -75,110 +92,7 @@ if (isset($_POST['updateRec'])) {
                         <h3 class="card-title">Create New Guest</h3>
                       </div>
                       <form method="post" target="">
-                        <div class="row">
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label for="guestVisitDate">Date as Guest</label>
-                              <input type="date" class="form-control" name="guestVisitDate" id="guestVisitDate" value="<?php echo getToday(); ?>" required>                                
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label for="guestFirstName">Guest FirstName</label>
-                              <input type="text" class="form-control" name="guestFirstName" id="guestFirstName" placeholder="Guest FirstName" required>                                
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label for="guestLastName">Guest Surname</label>
-                              <input type="text" class="form-control" name="guestLastName" id="guestLastName" placeholder="Guest Surname" required>                                
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-3">
-                            <label for="guestGender">Guest Sex</label>
-                            <div class="form-group">
-                              <select class="form-control" id="guestGender" name="guestGender">
-                              <option value="Male">Male</option>
-                                <option value="Female" selected>Female</option>
-                              </select>                                              
-                            </div>
-                          </div>
-                          <div class="col-sm-3">
-                            <label for="guestLastName">Resident in Abuja?</label>
-                            <div class="form-group">
-                              <select class="form-control" id="guestResident" name="guestResident">
-                                <option value="yes" selected>Yes</option>
-                                <option value="no">No</option>
-                              </select>                            
-                            </div>
-                          </div>
-                          <div class="col-sm-3">
-                            <label for="guestMembership">Member of RCCG?</label>
-                            <div class="form-group">
-                              <select class="form-control" id="guestMembership" name="guestMembership">
-                                <option value="yes" selected>Yes</option>
-                                <option value="no">No</option>
-                              </select>                                                            
-                            </div>
-                          </div>
-                          <div class="col-sm-3">
-                            <label for="guestAgeRange">Age Range</label>
-                            <div class="form-group">
-                              <select class="form-control" id="guestAgeRange" name="guestAgeRange">
-                                <option value="13-20">13-20</option>
-                                <option value="21-40" selected>21-40</option>
-                                <option value="41-50">41-50</option>
-                                <option value="50+">50+</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label for="guestPhone">Guest Mobilenumber</label>
-                              <input type="text" class="form-control" name="guestPhone" id="guestPhone" placeholder="Guest PhoneNumber" required>
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label for="guestEmail">Guest email</label>
-                              <input type="text" class="form-control" name="guestEmail" id="guestEmail" placeholder="Guest email" required>
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label for="guestOccupation">Guest Occupation</label>
-                              <input type="text" class="form-control" name="guestOccupation" id="guestOccupation" placeholder="Guest Occupation">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="guestHomeAddress">Guest Home Address</label>
-                              <textarea class="form-control" rows="5" name="guestHomeAddress" id="guestHomeAddress" required>What's you Home Address?</textarea>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="guestServiceReport">Tell us about the Service</label>
-                              <textarea class="form-control" rows="5" name="guestServiceReport" id="guestServiceReport" spellcheck="true">Which segment of the service did you enjoy most?</textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-8">
-
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                                <button type="submit" id="newRec" name="newRec" class="btn btn-success float-right">Save Guest</button>
-                              </div>
-                          </div>
-                        </div>                        
+                        <?php echo buildNewForm(); ?>                        
                       </form>
                     </div>
                   </div>
@@ -189,24 +103,7 @@ if (isset($_POST['updateRec'])) {
                         <h3 class="card-title">Promote Guest</h3>
                       </div>
                       <form method="post" target="">
-                        <div class="row">
-                          <div class="col-sm-8">
-                            <div class="card-body">
-                              <div class="form-group">
-                                <label for="guestName">Guest</label>
-                                <input type="text" class="form-control" name="guestName" id="guestName" required value="<?php echo getSpecificGuest($_REQUEST['rid']); ?>">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="card-body">
-                              <!-- <div class="form-group"> -->
-                                <!-- <label for="deleteRec"></label> -->
-                                <button type="submit" id="deleteRec" name="deleteRec" class="btn btn-success float-right">Promote Guest</button>
-                              <!-- </d/   iv> -->
-                            </div>
-                          </div>
-                        </div>
+                        <?php echo buildPromoteForm($_REQUEST['rid']) ?>
                       </form>
                     </div>
                   </div>
@@ -217,35 +114,7 @@ if (isset($_POST['updateRec'])) {
                         <h3 class="card-title">Edit Guest</h3>
                       </div>
                       <form method="post" target="">
-                        <div class="row">
-                          <div class="col-sm-8">
-                            <div class="card-body">
-                              <div class="form-group">
-                                <label for="guestName">Guest</label>
-                                <input type="text" class="form-control" name="guestName" id="guestName" required value="<?php echo getSpecificGuest($_REQUEST['rid']); ?>">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="card-body">
-                              <div class="form-group">
-                                <label for="roleStatus">Status</label>
-                                <select class="custom-select rounded-0" name="roleStatus" id="roleStatus" required>
-                                  <?php echo getGuestStatus($_REQUEST['db_Status']); ?>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-12">
-                            <div class="card-body">
-                              <div class="form-group">
-                                <button type="submit" id="updateRec" name="updateRec" class="btn btn-success float-right">Update Guest</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        <?php echo buildEditForm($_REQUEST['rid']); ?> 
                       </form>
                     </div>
                   </div>
@@ -312,8 +181,8 @@ if (isset($_POST['updateRec'])) {
         "info": true,
         "autoWidth": false,
         "responsive": true,
-        "buttons": ["excel", "pdf", "colvis"]
-      }).buttons().container().appendTo('#role_wrapper .col-md-6:eq(0)');;
+        //"buttons": ["excel", "pdf", "colvis"]
+      }).buttons().container().appendTo('#guests_wrapper .col-md-6:eq(0)');;
     });
   </script>
 </body>
@@ -322,15 +191,94 @@ if (isset($_POST['updateRec'])) {
 
 
 <?php
+///--------------------------------------------------
+///------------- Geenral DML functions --------------
+///--------------------------------------------------
 
 function createNewGuest() 
 {
+  $rtn = '';
+  try {
+    $db = new connectDatabase();
+    if ($db->isLastQuerySuccessful()) {
+      $con = $db->connect();
+      $sql = "INSERT INTO guests 
+        (guestVisitDate,guestFirstName,guestLastName,guestSex,guestAgeRange,guestPhone,guestEmail,guestHomeAddress,
+        guestServiceReport,guestResident,guestMembership,guestOccupation) 
+        VALUES (:gstVD,:gstFN,:gstLN,:gstSx,:gstAR,:gstPh,:gstEm,:gstHAdd,:gstSRpt,:gstRed,:gstMem,:gstOccp)";
 
+      $stmt = $con->prepare($sql);
+      $stmt->bindparam(":gstVD", $_REQUEST['guestVisitDate'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstFN", $_REQUEST['guestFirstName'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstLN", $_REQUEST['guestLastName'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstSx", $_REQUEST['guestSex'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstAR", $_REQUEST['guestAgeRange'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstPh", $_REQUEST['guestPhone'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstEm", $_REQUEST['guestEmail'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstHAdd", $_REQUEST['guestHomeAddress'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstSRpt", $_REQUEST['guestServiceReport'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstRed", $_REQUEST['guestResident'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstMem", $_REQUEST['guestMembership'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstOccp", $_REQUEST['guestOccupation'], PDO::PARAM_STR);
+      $row = $stmt->execute();
+
+      if ($row) {
+        $rtn = "The Account <b>" . $_REQUEST['guestFirstName'] ." ". $_REQUEST['guestLastName']. "</b> has been created!";
+        //trigger_error($msg, E_USER_NOTICE);
+      }
+    } else {
+      trigger_error($db->connectionError());
+    }
+    $db->closeConnection();
+  } catch (PDOException $e) {
+    trigger_error($e->getMessage());
+  }
+
+  return ($rtn == '') ? 'No Guest Data' : $rtn;
 }
 
-function getGuestStatus()
+function UpdateGuest()
 {
-  
+  $rtn = '';
+  try {
+    $db = new connectDatabase();
+    if ($db->isLastQuerySuccessful()) {
+      $con = $db->connect();
+      $sql = "UPDATE guests SET guestFirstName= :gstFN, 
+        guestLastName=:gstLN, guestSex=:gstSx, guestAgeRange=:gstAgR, guestPhone=:gstPhn,
+        guestEmail=:gstEm, guestHomeAddress=:gstHmA, guestServiceReport=:gstSvR, 
+        guestResident=:gstRes, guestMembership=:gstMem, guestOccupation=:gstOcc 
+        WHERE guestID=:gstID";
+
+      $stmt = $con->prepare($sql);
+      $stmt->bindparam(":gstID", $_REQUEST['rid'], PDO::PARAM_INT);
+      $stmt->bindparam(":gstFN", $_REQUEST['guestFirstName'], PDO::PARAM_STR);      
+      $stmt->bindparam(":gstLN", $_REQUEST['guestLastName'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstSx", $_REQUEST['guestSex'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstAgR", $_REQUEST['guestAgeRange'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstPhn", $_REQUEST['guestPhone'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstEm", $_REQUEST['guestEmail'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstHmA", $_REQUEST['guestHomeAddress'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstSvR", $_REQUEST['guestServiceReport'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstRes", $_REQUEST['guestResident'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstMem", $_REQUEST['guestMembership'], PDO::PARAM_STR);
+      $stmt->bindparam(":gstOcc", $_REQUEST['guestOccupation'], PDO::PARAM_STR);
+      $row = $stmt->execute();
+
+      if ($row) {
+        $rtn = "The Account <b>" . $_REQUEST['guestFirstName'] 
+          ." " . $_REQUEST['guestLastName'] . "</b> has been updated";
+        //trigger_error($msg, E_USER_NOTICE);
+      }
+    } else {
+      trigger_error($db->connectionError());
+    }
+    $db->closeConnection();
+  } catch (PDOException $e) {
+    trigger_error($e->getMessage());
+  }
+
+  return ($rtn == '') ? 'No Guest Data' : $rtn;
 }
 
 function getAccountRecords()
@@ -369,20 +317,19 @@ function getAccountRecords()
 
 function getSpecificGuest($rec)
 {
-  $rtn = '';
+  $rtn = array();
   try {
     $db = new connectDatabase();
     if ($db->isLastQuerySuccessful()) {
       $con = $db->connect();
 
-      $sql = "SELECT roleID,roleName,roleStatus FROM roles WHERE roleID = $rec";
+      $sql = "SELECT * FROM guests WHERE guestID = $rec";
       $stmt = $con->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
       $stmt->execute();
       $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
       foreach ($stmt->fetchAll() as $row) {
-        $rtn = $row['roleName'];
-        $_REQUEST['db_Status'] = $row['roleStatus'];
+        $rtn=$row;
       }
     } else {
       trigger_error($db->connectionError());
@@ -391,56 +338,204 @@ function getSpecificGuest($rec)
   } catch (PDOException $e) {
     trigger_error($db->connectionError());
   }
-  return ($rtn == '') ? 'No Guest Data' : $rtn;
+  return (count($rtn) >= 1) ? $rtn : 'No Guest Data';
 }
 
-function UpdateGuest()
+///--------------------------------------------------
+///-------------- Build Form functions --------------
+///--------------------------------------------------
+function buildEditForm($id)
 {
-  $rtn = '';
-  try {
-    $db = new connectDatabase();
-    if ($db->isLastQuerySuccessful()) {
-      $con = $db->connect();
-      $sql = "UPDATE roles SET roleName= :roleN, roleStatus= :roleS WHERE roleID=:roleID";
+  $rtn='';$gst=array();
+  $gst=getSpecificGuest($id);
+  // die('the value is '.$gst['guestVisitDate']);
+  if (is_array($gst) && count($gst) >= 1){
+    $dat=new DateTime($gst['guestVisitDate']); //$dat->format('D d M, Y');
+    $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestVisitDate">Date as Guest</label>';
+    $rtn.='<input type="text" class="form-control" name="guestVisitDate" id="guestVisitDate" value="'.$dat->format('D d F, Y').'" readonly></div></div>';
 
-      $stmt = $con->prepare($sql);
-      $stmt->bindparam(":roleN", $_REQUEST['roleName'], PDO::PARAM_STR);
-      $stmt->bindparam(":roleS", $_REQUEST['roleStatus']);
-      $stmt->bindparam(":roleID", $_REQUEST['rid']);
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestFirstName">Guest FirstName</label>';
+    $rtn.='<input type="text" class="form-control" name="guestFirstName" id="guestFirstName" value="'.$gst['guestFirstName'].'" required></div></div>';
 
-      $row = $stmt->execute();
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestLastName">Guest Surname</label>';
+    $rtn.='<input type="text" class="form-control" name="guestLastName" id="guestLastName" value="'.$gst['guestLastName'].'" required></div></div></div>';
 
-      if ($row) {
-        $rtn = "The Account <b>" . $_REQUEST['roleName'] . "</b> has been updated";
-        //trigger_error($msg, E_USER_NOTICE);
-      }
-    } else {
-      trigger_error($db->connectionError());
-    }
-    $db->closeConnection();
-  } catch (PDOException $e) {
-    trigger_error($e->getMessage());
+    $rtn.='<div class="row"><div class="col-sm-3"><label for="guestSex">Guest Sex</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestSex" name="guestSex">'; //<option value="Male">Male</option>';
+    if ($gst['guestSex'] == "Male") { $rtn.='<option value="Male" selected>Male</option><option value="Female">Female</option></select></div></div>'; }
+    else {$rtn.='<option value="Male">Male</option><option value="Female" selected>Female</option></select></div></div>';}
+
+    $rtn.='<div class="col-sm-3"><label for="guestLastName">Resident in Abuja?</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestResident" name="guestResident">';
+    if ($gst['guestResident'] == "yes") { $rtn.='<option value="yes" selected>Yes</option><option value="no">No</option></select></div></div>'; }
+    else {$rtn.='<option value="yes">Yes</option><option value="no" selected>No</option></select></div></div>';}
+
+    $rtn.='<div class="col-sm-3"><label for="guestMembership">Member of RCCG?</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestMembership" name="guestMembership">';
+    if ($gst['guestMembership'] == "yes") { $rtn.='<option value="yes" selected>Yes</option><option value="no">No</option></select></div></div>'; }
+    else {$rtn.='<option value="yes">Yes</option><option value="no" selected>No</option></select></div></div>';}
+
+    $rtn.='<div class="col-sm-3"><label for="guestAgeRange">Age Range</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestAgeRange" name="guestAgeRange">';
+    $rtn.=($gst['guestAgeRange'] == "13-20")? '<option value="13-20" selected>13-20</option>': '<option value="13-20">13-20</option>';
+    $rtn.=($gst['guestAgeRange'] == "21-40")? '<option value="21-40" selected>21-40</option>': '<option value="21-40">21-40</option>';
+    $rtn.=($gst['guestAgeRange'] == "41-50")? '<option value="41-50" selected>41-50</option>': '<option value="41-50">41-50</option>';
+    $rtn.=($gst['guestAgeRange'] == "50+")? '<option value="50+" selected>50+</option>': '<option value="50+">50+</option></select></div></div></div>';
+
+    $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestPhone">Guest Mobilenumber</label>';
+    $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" value="'.$gst['guestPhone'].'" required></div></div>';
+
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestEmail">Guest email</label>';
+    $rtn.='<input type="email" class="form-control" name="guestEmail" id="guestEmail" value="'.$gst['guestEmail'].'" required></div></div>';
+
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestOccupation">Guest Occupation</label>';
+    $rtn.='<input type="text" class="form-control" name="guestOccupation" id="guestOccupation" value="'.$gst['guestOccupation'].'"></div></div></div>';
+
+    $rtn.='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="guestHomeAddress">Guest Home Address</label>';
+    $rtn.='<textarea class="form-control" rows="5" name="guestHomeAddress" id="guestHomeAddress" required>'.$gst['guestHomeAddress'].'</textarea></div></div>';
+
+    $rtn.='<div class="col-sm-6"><div class="form-group"><label for="guestServiceReport">Tell us about the Service</label>';
+    $rtn.='<textarea class="form-control" rows="5" name="guestServiceReport" id="guestServiceReport" spellcheck="true">'.$gst['guestServiceReport'].'</textarea></div></div></div>';
+
+    $rtn.='<div class="row"><div class="col-sm-12"><div class="form-group">';
+    $rtn.='<button type="submit" id="updateRec" name="updateRec" class="btn btn-success float-right">Update Guest</button></div></div></div>';
   }
 
-  return ($rtn == '') ? 'No Guest Data' : $rtn;
+  // die('the value is '.$rtn);
+  $_SESSION['oldRec']=$gst;
+  return $rtn;
 }
 
+function buildNewForm()
+{
+  $rtn= '<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestVisitDate">Date as Guest</label>';
+  $rtn.='<input type="date" class="form-control" name="guestVisitDate" id="guestVisitDate" value="'. getToday() .'" required></div></div>';
+
+  $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestFirstName">Guest FirstName</label>';
+  $rtn.='<input type="text" class="form-control" name="guestFirstName" id="guestFirstName" placeholder="Guest FirstName" required></div></div>';
+
+  $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestLastName">Guest Surname</label>';
+  $rtn.='<input type="text" class="form-control" name="guestLastName" id="guestLastName" placeholder="Guest Surname" required></div></div></div>';
+
+  $rtn.='<div class="row"><div class="col-sm-3"><label for="guestSex">Guest Sex</label><div class="form-group">';
+  $rtn.='<select class="form-control" id="guestSex" name="guestSex"><option value="Male">Male</option><option value="Female" selected>Female</option></select></div></div>';
+
+  $rtn.='<div class="col-sm-3"><label for="guestLastName">Resident in Abuja?</label><div class="form-group"><select class="form-control" id="guestResident" name="guestResident">';
+  $rtn.='<option value="yes" selected>Yes</option><option value="no">No</option></select></div></div>';
+
+  $rtn.='<div class="col-sm-3"><label for="guestMembership">Member of RCCG?</label><div class="form-group"><select class="form-control" id="guestMembership" name="guestMembership">';
+  $rtn.='<option value="yes" selected>Yes</option><option value="no">No</option></select></div></div>';
+
+  $rtn.='<div class="col-sm-3"><label for="guestAgeRange">Age Range</label><div class="form-group"><select class="form-control" id="guestAgeRange" name="guestAgeRange">';
+  $rtn.='<option value="13-20">13-20</option><option value="21-40" selected>21-40</option><option value="41-50">41-50</option><option value="50+">50+</option></select></div></div></div>';
+  
+  $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestPhone">Guest Mobilenumber</label>';
+  $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" placeholder="Guest PhoneNumber" required></div></div>';
+
+  $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestEmail">Guest email</label>';
+  $rtn.='<input type="email" class="form-control" name="guestEmail" id="guestEmail" placeholder="Guest email" required></div></div>';
+
+  $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestOccupation">Guest Occupation</label>';
+  $rtn.='<input type="text" class="form-control" name="guestOccupation" id="guestOccupation" placeholder="Guest Occupation"></div></div></div>';
+
+  $rtn.='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="guestHomeAddress">Guest Home Address</label>';
+  $rtn.='<textarea class="form-control" rows="5" name="guestHomeAddress" id="guestHomeAddress" required>What\'s you Home Address?</textarea></div></div>';
+
+  $rtn.='<div class="col-sm-6"><div class="form-group"><label for="guestServiceReport">Tell us about the Service</label>';
+  $rtn.='<textarea class="form-control" rows="5" name="guestServiceReport" id="guestServiceReport" spellcheck="true">Which segment of the service did you enjoy most?</textarea></div></div></div>';
+  
+  $rtn.='<div class="row"><div class="col-sm-12"><div class="form-group">';
+  $rtn.='<button type="submit" id="saveRec" name="saveRec" class="btn btn-success float-right">Save New Guest</button></div></div></div>';
+
+  return $rtn;
+}
+
+function buildPromoteForm($id)
+{
+  $rtn='';$gst=array();
+  $gst=getSpecificGuest($id);
+  // die('the value is '.$gst['guestVisitDate']);
+  if (is_array($gst) && count($gst) >= 1){
+    $dat=new DateTime($gst['guestVisitDate']); //$dat->format('D d M, Y');
+    $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestVisitDate">Date as Guest</label>';
+    $rtn.='<input type="text" class="form-control" name="guestVisitDate" id="guestVisitDate" value="'.$dat->format('D d F, Y').'" readonly></div></div>';
+
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestFirstName">Guest FirstName</label>';
+    $rtn.='<input type="text" class="form-control" name="guestFirstName" id="guestFirstName" value="'.$gst['guestFirstName'].'" readonly></div></div>';
+
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestLastName">Guest Surname</label>';
+    $rtn.='<input type="text" class="form-control" name="guestLastName" id="guestLastName" value="'.$gst['guestLastName'].'" readonly></div></div></div>';
+
+    $rtn.='<div class="row"><div class="col-sm-3"><label for="guestSex">Guest Sex</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestSex" name="guestSex" disabled>'; //<option value="Male">Male</option>';
+    if ($gst['guestSex'] == "Male") { $rtn.='<option value="Male" selected>Male</option><option value="Female">Female</option></select></div></div>'; }
+    else {$rtn.='<option value="Male">Male</option><option value="Female" selected>Female</option></select></div></div>';}
+
+    $rtn.='<div class="col-sm-3"><label for="guestLastName">Resident in Abuja?</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestResident" name="guestResident" disabled>';
+    if ($gst['guestResident'] == "yes") { $rtn.='<option value="yes" selected>Yes</option><option value="no">No</option></select></div></div>'; }
+    else {$rtn.='<option value="yes">Yes</option><option value="no" selected>No</option></select></div></div>';}
+
+    $rtn.='<div class="col-sm-3"><label for="guestMembership">Member of RCCG?</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestMembership" name="guestMembership" disabled>';
+    if ($gst['guestMembership'] == "yes") { $rtn.='<option value="yes" selected>Yes</option><option value="no">No</option></select></div></div>'; }
+    else {$rtn.='<option value="yes">Yes</option><option value="no" selected>No</option></select></div></div>';}
+
+    $rtn.='<div class="col-sm-3"><label for="guestAgeRange">Age Range</label><div class="form-group">';
+    $rtn.='<select class="form-control" id="guestAgeRange" name="guestAgeRange" disabled>';
+    $rtn.=($gst['guestAgeRange'] == "13-20")? '<option value="13-20" selected>13-20</option>': '<option value="13-20">13-20</option>';
+    $rtn.=($gst['guestAgeRange'] == "21-40")? '<option value="21-40" selected>21-40</option>': '<option value="21-40">21-40</option>';
+    $rtn.=($gst['guestAgeRange'] == "41-50")? '<option value="41-50" selected>41-50</option>': '<option value="41-50">41-50</option>';
+    $rtn.=($gst['guestAgeRange'] == "50+")? '<option value="50+" selected>50+</option>': '<option value="50+">50+</option></select></div></div></div>';
+
+    $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestPhone">Guest Mobilenumber</label>';
+    $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" value="'.$gst['guestPhone'].'" readonly></div></div>';
+
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestEmail">Guest email</label>';
+    $rtn.='<input type="email" class="form-control" name="guestEmail" id="guestEmail" value="'.$gst['guestEmail'].'" readonly></div></div>';
+
+    $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestOccupation">Guest Occupation</label>';
+    $rtn.='<input type="text" class="form-control" name="guestOccupation" id="guestOccupation" value="'.$gst['guestOccupation'].'" readonly></div></div></div>';
+
+    $rtn.='<div class="row"><div class="col-sm-6"><div class="form-group"><label for="guestHomeAddress">Guest Home Address</label>';
+    $rtn.='<textarea class="form-control" rows="5" name="guestHomeAddress" id="guestHomeAddress" readonly>'.$gst['guestHomeAddress'].'</textarea></div></div>';
+
+    $rtn.='<div class="col-sm-6"><div class="form-group"><label for="guestServiceReport">Tell us about the Service</label>';
+    $rtn.='<textarea class="form-control" rows="5" name="guestServiceReport" id="guestServiceReport" spellcheck="true" readonly>'.$gst['guestServiceReport'].'</textarea></div></div></div>';
+
+    $rtn.='<div class="row"><div class="col-sm-12"><div class="form-group">';
+    $rtn.='<button type="submit" id="promoteRec" name="promoteRec" class="btn btn-success float-right">Promote Guest</button></div></div></div>';
+  }
+
+  // die('the value is '.$rtn);
+  $_SESSION['oldRec']=$gst;
+  return $rtn;
+}
+
+
+///--------------------------------------------------
+///---------- Data Verification functions -----------
+///--------------------------------------------------
 function canSave()
 {
   $rtn = true;
   try {
-    $rol = $_REQUEST['roleName'];
+    $phone = $_REQUEST['guestPhone'];
     $db = new connectDatabase();
     if ($db->isLastQuerySuccessful()) {
       $con = $db->connect();
-      $sql = "SELECT * FROM roles WHERE roleName = '$rol'";
+      $sql = "SELECT * FROM guests WHERE guestPhone = '$phone'";
       $stmt = $con->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
       $stmt->execute();
       $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
       foreach ($stmt->fetchAll() as $row) {
         $rtn = false;
-        trigger_error("This Guest already exist in the Database!<br>Kindly pick a different Guest Name", E_USER_NOTICE);
+        trigger_error("This Guest already exist in the Database!<br>Kindly pick a different Guest", E_USER_NOTICE);
+      }
+      if (strlen($phone) != 11) {
+        $rtn = false;
+        $_SESSION['guestErr']="The Phone Number is incorrect! Kindly correct Guest Phonenumber";
       }
     } else {
       trigger_error($db->connectionError());
@@ -455,33 +550,36 @@ function canSave()
 
 function canSaveEdit()
 {
-  $rtn = true;
-  try {
-    $rol = $_REQUEST['roleName'];
-    $rSta = $_REQUEST['roleStatus'];
-    $db = new connectDatabase();
-    if ($db->isLastQuerySuccessful()) {
-      $con = $db->connect();
-      $sql = "SELECT * FROM roles WHERE roleName = '$rol' AND roleStatus = '$rSta'";
-      //trigger_error($sql,E_USER_NOTICE);
-      $stmt = $con->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
-      $stmt->execute();
-      $stmt->setFetchMode(PDO::FETCH_ASSOC);
+  $rtn = false;$cse=array();$oldRec=$_SESSION['oldRec'];
 
-      foreach ($stmt->fetchAll() as $row) {
-        $rtn = false;
-        trigger_error("This Guest already exist in the Database!<br>Kindly pick a different Guest Name", E_USER_NOTICE);
-      }
-    } else {
-      trigger_error($db->connectionError());
-    }
-    $db->closeConnection();
-  } catch (PDOException $e) {
-    trigger_error($db->connectionError());
+  $cse['guestFirstName']=$_REQUEST['guestFirstName'];
+  $cse['guestLastName']=$_REQUEST['guestLastName'];
+  $cse['guestSex']=$_REQUEST['guestSex'];
+  $cse['guestAgeRange']=$_REQUEST['guestAgeRange'];
+  $cse['guestPhone']=$_REQUEST['guestPhone'];
+  $cse['guestEmail']=$_REQUEST['guestEmail'];
+  $cse['guestHomeAddress']=$_REQUEST['guestHomeAddress'];
+  $cse['guestServiceReport']=$_REQUEST['guestServiceReport'];
+  $cse['guestResident']=$_REQUEST['guestResident'];
+  $cse['guestMembership']=$_REQUEST['guestMembership'];
+
+  if (count(array_diff($oldRec,$cse)) >= 1){
+    $rtn=true;
+  } else {
+    $_SESSION['guestErr']='No new data to update!';
+    $rtn = false;
   }
 
+  if (strlen($_REQUEST['guestPhone']) != 11) {
+    $rtn = false;
+    $_SESSION['guestErr']="The Phone Number is incorrect! Kindly correct Guest Phonenumber";
+  }
   return $rtn;
 }
+
+///--------------------------------------------------
+///------------ general-purpose functions -----------
+///--------------------------------------------------
 
 function userDetails()
 {

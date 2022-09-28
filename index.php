@@ -13,7 +13,7 @@ $msg = '';
 //die();
 if (isset($_REQUEST['submit'])) {
   if (!(empty($_REQUEST['username'])) && !(empty($_REQUEST['password']))) {
-
+    
     $db = new connectDatabase(); //    
     if ($db->isLastQuerySuccessful()) {
       $con = $db->connect();
@@ -27,8 +27,9 @@ if (isset($_REQUEST['submit'])) {
         $stmt = $con->prepare($sql);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $row=$stmt->fetch();
 
-        foreach ($stmt->fetchAll() as $row) {
+        if ($row) {
           if ($row['secStatus'] !== 'active') {
             $msg = 'Account deactivated, please contact your Admin';
           } else {
@@ -52,10 +53,14 @@ if (isset($_REQUEST['submit'])) {
             $db->closeConnection();
             die('<head><script language="javascript">window.location="home.php";</script></head>');
           }
+        } else {
+          $msg='Wrong username and password combination!';
         }
       } catch (PDOException $er) {
         $msg = $er->getMessage() . '<br>Please contact RCCG Overcomers Media Unit!';
       }
+    } else {
+      $msg=$db->getErrorMessage();
     }
   }
 }
@@ -87,7 +92,7 @@ if (isset($_REQUEST['submit'])) {
     <div class="card">
       <div class="card-body login-card-body">
         <p class="login-box-msg">Sign in to start your session</p>
-        <span class="badge badge-danger"><?php echo $msg ?></span>
+        <span class="badge badge-danger"><?php echo $msg; ?></span>
 
         <form action="" method="post">
           <div class="input-group mb-3">

@@ -5,11 +5,9 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1){
 include('includes/header.php'); ?>
 
 <body class="hold-transition layout-top-nav">
-
   <div id="app">
     <div class="wrapper">
       <?php include('includes/top_menu.php'); ?>
-
       <div class="content-wrapper">
         <div class="content">
           <div class="container">
@@ -70,7 +68,7 @@ include('includes/header.php'); ?>
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-12">
                     <div class="card">
                       <div class="card-body">
@@ -95,7 +93,7 @@ include('includes/header.php'); ?>
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
