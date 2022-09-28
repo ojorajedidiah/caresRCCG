@@ -7,7 +7,7 @@
 
 <?php include('includes/header.php'); ?>
 <?php
-session_start();
+//session_start();
 $_SESSION['msgErr']='';
 $errMsg = '';
 if (isset($_REQUEST['saveRec'])) {

@@ -1,6 +1,6 @@
 <?php include('includes/header.php'); ?>
 <?php
-session_start();
+//session_start();
 $_SESSION['guestErr']='';
 $errGuest = '';
 if (isset($_REQUEST['saveRec'])) {
