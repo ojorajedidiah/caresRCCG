@@ -1,8 +1,17 @@
 <?php
-//session_start();
-
+date_default_timezone_set("Africa/Lagos");
+include('includes/header.php'); 
 if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1){
-include('includes/header.php'); ?>
+
+?>
+
+<style>
+  #grids.tbody th,
+  #grids tbody td {
+    height: 5px;
+  }
+</style>
+
 
 <body class="hold-transition layout-top-nav">
   <div id="app">
@@ -20,82 +29,87 @@ include('includes/header.php'); ?>
                   </div>
                   <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                      <li class="breadcrumb-item"><a href="#">Home</a></li>
-                      <li class="breadcrumb-item acive"> Dashboard </li>
+                      <li class="breadcrumb-item"><a href="">Home</a></li>
+                      <li class="breadcrumb-item acive"> <?php echo namePage(); ?> </li>
                     </ol>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="content">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-md-3 col-sm-6 col-12">
-                    <div class="small-box bg-info">
-                      <div class="inner">
-                        <h3><?php echo number_format(getTotalNumNCS()); ?></h3>
-                        <p>No. of Guests (This Week)</p>
+            <?php if (isset($_REQUEST['p'])) { 
+              grantAccess();
+             } else { ?>
+              <div class="content">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-3 col-sm-6 col-12">
+                      <div class="small-box bg-info">
+                        <div class="inner">
+                          <h3><?php echo number_format(getTotalNumNCS()); ?></h3>
+                          <p>No. of Guests (This Week)</p>
+                        </div>
+                        <div class="icon"><i class="fas fa-user-secret"></i></div>
                       </div>
-                      <div class="icon"><i class="fas fa-user-secret"></i></div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-12">
+                      <div class="small-box bg-secondary">
+                        <div class="inner">
+                          <h3><?php echo number_format(getTotalNumCAC()); ?></h3>
+                          <p>No. of Guests (This Month)</p>
+                        </div>
+                        <div class="icon"><i class="fas fa-user-shield"></i></div>
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-12">
+                      <div class="small-box bg-success">
+                        <div class="inner">
+                          <h3><?php echo number_format(getTotalNumTPM()); ?></h3>
+                          <p>Total No. of Guests (Quarter)</p>
+                        </div>
+                        <div class="icon"><i class="fas fa-user-tie"></i></div>
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-12">
+                      <div class="small-box bg-success">
+                        <div class="inner">
+                          <h3><?php echo number_format(getTotalNumTPM()); ?></h3>
+                          <p>Retention Rate (Month)</p>
+                        </div>
+                        <div class="icon"><i class="fas fa-user-tie"></i></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-3 col-sm-6 col-12">
-                    <div class="small-box bg-secondary">
-                      <div class="inner">
-                        <h3><?php echo number_format(getTotalNumCAC()); ?></h3>
-                        <p>No. of Guests (This Month)</p>
-                      </div>
-                      <div class="icon"><i class="fas fa-user-shield"></i></div>
-                    </div>
-                  </div>
-                  <div class="col-md-3 col-sm-6 col-12">
-                    <div class="small-box bg-success">
-                      <div class="inner">
-                        <h3><?php echo number_format(getTotalNumTPM()); ?></h3>
-                        <p>Total No. of Guests (Quarter)</p>
-                      </div>
-                      <div class="icon"><i class="fas fa-user-tie"></i></div>
-                    </div>
-                  </div>
-                  <div class="col-md-3 col-sm-6 col-12">
-                    <div class="small-box bg-success">
-                      <div class="inner">
-                        <h3><?php echo number_format(getTotalNumTPM()); ?></h3>
-                        <p>Retention Rate (Month)</p>
-                      </div>
-                      <div class="icon"><i class="fas fa-user-tie"></i></div>
-                    </div>
-                  </div>
-                </div>
-                <!-- <div class="row">
-                  <div class="col-12">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-6 col-md-3 text-center">
-                            <input type="text" class="knob" value=40 data-width="120" data-height="120" data-fgColor="red" style="width: 64px; height: 40px; position: absolute; vertical-align: middle; margin-top: 40px; margin-left: -92px; border: 0px; background: none; font: bold 24px Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; appearance: none;">
-                            <div class="knob-label">Guests Registration %</div>
-                          </div>
-                          <div class="col-6 col-md-3 text-center">
-                            <input type="text" class="knob" value=100 data-skin="tron" data-thickness="0.2" data-angleArc="250" data-angleOffset="-125" data-width="120" data-height="120" data-fgColor="green">
-                            <div class="knob-label">Guests Messages %</div>
-                          </div>
-                          <div class="col-6 col-md-3 text-center">
-                            <input type="text" class="knob" value=80 data-width="120" data-height="120" data-fgColor="red" style="width: 64px; height: 40px; position: absolute; vertical-align: middle; margin-top: 40px; margin-left: -92px; border: 0px; background: none; font: bold 24px Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; appearance: none;">
-                            <div class="knob-label">Retention %</div>
-                          </div>
-                          <div class="col-6 col-md-3 text-center">
-                            <input type="text" class="knob" value=20 data-skin="tron" data-thickness="0.2" data-angleArc="250" data-angleOffset="-125" data-width="120" data-height="120" data-fgColor="green">
-                            <div class="knob-label">Non-Retention %</div>
+
+                  <!-- <div class="row">
+                    <div class="col-12">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-6 col-md-3 text-center">
+                              <input type="text" class="knob" value=40 data-width="120" data-height="120" data-fgColor="red" style="width: 64px; height: 40px; position: absolute; vertical-align: middle; margin-top: 40px; margin-left: -92px; border: 0px; background: none; font: bold 24px Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; appearance: none;">
+                              <div class="knob-label">Guests Registration %</div>
+                            </div>
+                            <div class="col-6 col-md-3 text-center">
+                              <input type="text" class="knob" value=100 data-skin="tron" data-thickness="0.2" data-angleArc="250" data-angleOffset="-125" data-width="120" data-height="120" data-fgColor="green">
+                              <div class="knob-label">Guests Messages %</div>
+                            </div>
+                            <div class="col-6 col-md-3 text-center">
+                              <input type="text" class="knob" value=80 data-width="120" data-height="120" data-fgColor="red" style="width: 64px; height: 40px; position: absolute; vertical-align: middle; margin-top: 40px; margin-left: -92px; border: 0px; background: none; font: bold 24px Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; appearance: none;">
+                              <div class="knob-label">Retention %</div>
+                            </div>
+                            <div class="col-6 col-md-3 text-center">
+                              <input type="text" class="knob" value=20 data-skin="tron" data-thickness="0.2" data-angleArc="250" data-angleOffset="-125" data-width="120" data-height="120" data-fgColor="green">
+                              <div class="knob-label">Non-Retention %</div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div> -->
+                  </div> -->
+                </div>
               </div>
-            </div>
+            <?php } ?>
           </div>
         </div>
       </div>
@@ -111,14 +125,28 @@ include('includes/header.php'); ?>
   </div>
 
   <?php } else { 
-    die('<head><script LANGUAGE="JavaScript">window.location="index.php";</script></head>');
+    die('<head><script LANGUAGE="JavaScript">window.location="index";</script></head>');
   } ?>
 
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/adminlte.min.js"></script>
   <script src="assets/js/jquery.knob.min.js"></script>
+
+  <script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="assets/plugins/jszip/jszip.min.js"></script>
+  <script src="assets/plugins/pdfmake/pdfmake.min.js"></script>
+  <script src="assets/plugins/pdfmake/vfs_fonts.js"></script>
+  <script src="assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <!-- <script src="assets/js/demo.js"></script> -->
+
   <script>
     $(function() {
       $('.knob').knob({
@@ -181,6 +209,18 @@ include('includes/header.php'); ?>
         }
       })
     });
+
+    $(function() {
+      $("#grids").DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        //"buttons": ["excel", "pdf", "colvis"]
+      }).buttons().container().appendTo('#guests_wrapper .col-md-6:eq(0)');;
+    });
   </script>
 
 </body>
@@ -189,6 +229,17 @@ include('includes/header.php'); ?>
 
 
 <?php
+function namePage()
+{
+  $rtn='';
+  if(isset($_REQUEST['p']) && $_REQUEST['p'] != '') {
+    $rtn=ucwords($_REQUEST['p']);
+  } else {
+    $rtn='Dashboard';
+  }
+  return $rtn;
+}
+
 function getTotalNumNCS()
 {
   $cnt = 10;
@@ -234,6 +285,42 @@ function userDetails()
   }
 
   return $rtn;
+}
+
+function grantAccess(){
+  $errormsg = ''; ///, $usersOnline, $staffOnline, $allowed
+  global $pagePriviledge;
+
+  if (isset($_GET["p"])) {
+      //die("die".print_r($_SESSION). ' sessionID '. session_id());
+      $pageRequested = $_GET["p"];
+      //$pagePriviledge = $_SESSION[$pageRequested];
+      //die('<div id="layoutSidenav_content"><center><br><br><h1 class="style1">pageRequested ' . $pageRequested . '<br>pagePriviledge ' . $pagePriviledge . '</h1></center></div>');
+
+      //die('<br><br><br><br>');var_dump($_SESSION);
+      include($pageRequested .'.php');
+
+      // if (isset($_SESSION[$pageRequested])) {
+      //     $pagePriviledge = $_SESSION[$pageRequested];
+          
+      //     // $fname = @file_get_contents($pagePriviledge . '/' . $pageRequested . '.php');
+      //     $fname=@file_get_contents($pageRequested . '.php');         
+          
+      //     if ($fname === FALSE) {
+      //         $errormsg = 'PLEASE CONTACT YOUR ADMINISTRATOR TO ACCESS THIS PAGE!<br>...ACCESS DENIED...';
+      //     } else {
+      //         //die('<HEAD><SCRIPT lang="javascript">window.location="'.$pagePriviledge . '/' . $pageRequested .'.php";</SCRIPT></HEAD>');
+      //         // include($pagePriviledge . '/' . $pageRequested .'.php');
+      //         include($pageRequested .'.php');
+      //     }
+      // } else {
+      //     //$tmp=print_r(array_values($_SESSION));
+      //     $errormsg = 'YOU ARE NOT AUTHORISED TO VIEW THIS PAGE!<br>...ACCESS DENIED...';
+      // }
+  }
+  if ($errormsg != '') {
+      echo '<center><br><span style="color:red; font-size:20pt;">' . $errormsg . '</span></center>';
+  }
 }
 
 

@@ -5,6 +5,7 @@
 #	  Modified by: Adeleke Ojora
 
 session_start();
+date_default_timezone_set("Africa/Lagos");
 include('models/databaseConnection.class.php');
 $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -51,7 +52,8 @@ if (isset($_REQUEST['submit'])) {
             $stmt = $con->prepare($sql);
             $stmt->execute($data);
             $db->closeConnection();
-            die('<head><script language="javascript">window.location="home.php";</script></head>');
+            //die('i enter here');
+            die('<head><script language="javascript">window.location="home";</script></head>');
           }
         } else {
           $msg='Wrong username and password combination!';

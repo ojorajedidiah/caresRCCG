@@ -2,7 +2,7 @@
 session_start();
 
 tidyUp();
-die('<head><script LANGUAGE="JavaScript">window.location="index.php";</script></head>');
+die('<head><script LANGUAGE="JavaScript">window.location="index";</script></head>');
 
 function tidyUp(){
     $rnn = false;

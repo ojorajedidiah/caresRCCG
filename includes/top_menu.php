@@ -1,6 +1,6 @@
 <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
   <div class="container">
-    <a href="home.php" class="navbar-brand">
+    <a href="home" class="navbar-brand">
       <img src="assets/img/logo2.png" alt="rccg Logo" class="mr-2" style="width: 40px; height: 40px;">
       <span class="brand-text font-weight-light">RCCG Cares</span>
     </a>
@@ -12,10 +12,10 @@
     <div class="collapse navbar-collapse order-3" id="navbarCollapse">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a href="guests.php" class="nav-link">Guests</a>
+          <a href="home?p=guests" class="nav-link">Guests</a>
         </li>
         <li class="nav-item">
-          <a href="messages.php" class="nav-link">Messages</a>
+          <a href="home?p=messages" class="nav-link">Messages</a>
         </li>
         <li class="nav-item dropdown">
           <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Reports</a>
@@ -29,8 +29,8 @@
         <li class="nav-item dropdown">
           <a id="dropdownSubMenu2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Administration</a>
           <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-            <li><a href="roleMgt.php" class="dropdown-item">Role Management</a></li>
-            <li><a href="userAccounts.php" class="dropdown-item">User Management</a></li>
+            <li><a href="home?p=roles" class="dropdown-item">Role Management</a></li>
+            <li><a href="home?p=users" class="dropdown-item">User Management</a></li>
           </ul>
           </a>
         </li>
@@ -39,7 +39,7 @@
     
     <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
       <li class="nav-item">
-        <a class="nav-link" href="logout.php">Logout</a>
+        <a class="nav-link" href="logout">Logout</a>
       </li>
     </ul>
   </div>
