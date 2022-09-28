@@ -433,7 +433,7 @@ function buildNewForm()
   $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" placeholder="Guest PhoneNumber" required></div></div>';
 
   $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestEmail">Guest email</label>';
-  $rtn.='<input type="email" class="form-control" name="guestEmail" id="guestEmail" placeholder="Guest email" required></div></div>';
+  $rtn.='<input type="email" class="form-control" name="guestEmail" id="guestEmail" placeholder="Guest email"></div></div>';
 
   $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestOccupation">Guest Occupation</label>';
   $rtn.='<input type="text" class="form-control" name="guestOccupation" id="guestOccupation" placeholder="Guest Occupation"></div></div></div>';
