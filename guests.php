@@ -386,7 +386,7 @@ function buildEditForm($id)
     $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" value="'.$gst['guestPhone'].'" required></div></div>';
 
     $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestEmail">Guest email</label>';
-    $rtn.='<input type="email" class="form-control" name="guestEmail" id="guestEmail" value="'.$gst['guestEmail'].'" required></div></div>';
+    $rtn.='<input type="email" class="form-control" name="guestEmail" id="guestEmail" value="'.$gst['guestEmail'].'"></div></div>';
 
     $rtn.='<div class="col-sm-4"><div class="form-group"><label for="guestOccupation">Guest Occupation</label>';
     $rtn.='<input type="text" class="form-control" name="guestOccupation" id="guestOccupation" value="'.$gst['guestOccupation'].'"></div></div></div>';
