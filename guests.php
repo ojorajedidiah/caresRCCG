@@ -3,7 +3,7 @@
 $_SESSION['guestErr']='';
 $errGuest = '';
 if (isset($_REQUEST['saveRec'])) {
-  die('<br><br>the value is '.$_REQUEST);
+  //die('<br><br>the value is '.$_REQUEST);
   if (canSave()) {
     $errGuest = createNewGuest();
     $_REQUEST['v'] = "update";
