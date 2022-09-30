@@ -318,57 +318,6 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
         }
       })
     });
-
-    $(function() {
-      $("#grids").DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        //"buttons": ["excel", "pdf", "colvis"]
-      }).buttons().container().appendTo('#guests_wrapper .col-md-6:eq(0)');;
-    });
-
-    $('#msgBody').onfocus(function() {
-      var characterCount = $(this).val().length,
-        current = $('#current');
-      current.text(characterCount);
-    });
-
-    $('#msgBody').keyup(function() {
-
-      var characterCount = $(this).val().length,
-        current = $('#current'),
-        maximum = $('#maximum'),
-        theCount = $('#count');
-
-      current.text(characterCount);
-
-      /*This isn't entirely necessary, just playin around*/
-      if (characterCount < 70) {
-        current.css('color', '#666');
-      }
-      if (characterCount > 70 && characterCount < 90) {
-        current.css('color', '#6d5555');
-      }
-      if (characterCount > 90 && characterCount < 100) {
-        current.css('color', '#793535');
-      }
-      if (characterCount > 100 && characterCount < 120) {
-        current.css('color', '#841c1c');
-      }
-
-      if (characterCount >= 120) {
-        maximum.css('color', '#ff0001');
-        current.css('color', '#ff0001');
-        theCount.css('font-weight', 'bold');
-      } else {
-        maximum.css('color', '#666');
-        theCount.css('font-weight', 'normal');
-      }
-    });
   </script>
 
   </body>
