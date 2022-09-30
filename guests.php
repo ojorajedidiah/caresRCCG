@@ -1,15 +1,15 @@
-<!-- <?php //include_once('includes/header.php'); ?> -->
 <?php
 //session_start();
 $_SESSION['guestErr']='';
 $errGuest = '';
 if (isset($_REQUEST['saveRec'])) {
+  die('<br><br>the value is '.$_REQUEST);
   if (canSave()) {
     $errGuest = createNewGuest();
-    $_REQUEST['p'] = "update";
+    $_REQUEST['v'] = "update";
   } else {
     $errGuest=$_SESSION['guestErr'];
-    $_REQUEST['p'] = "new";
+    $_REQUEST['v'] = "new";
   }
   
 }
@@ -17,10 +17,10 @@ if (isset($_REQUEST['saveRec'])) {
 if (isset($_POST['updateRec'])) {
   if (canSaveEdit()) {
     $errGuest = UpdateGuest();
-    $_REQUEST['p'] = "update";
+    $_REQUEST['v'] = "update";
   }else {
     $errGuest=$_SESSION['guestErr'];
-    $_REQUEST['p'] = "edit";
+    $_REQUEST['v'] = "edit";
   }
   
 }
@@ -28,18 +28,14 @@ if (isset($_POST['updateRec'])) {
 if (isset($_POST['promoteRec'])) {
   // if (canSaveEdit()) {
   //   $errGuest = UpdateGuest();
-  //   $_REQUEST['p'] = "update";
+  //   $_REQUEST['v'] = "update";
   // }else {
   //   $errGuest=$_SESSION['guestErr'];
-  //   $_REQUEST['p'] = "edit";
+  //   $_REQUEST['v'] = "edit";
   // }  
 }
 ?>
-
-
-
-
-      
+     
 
 <div class="content">
   <div class="container-fluid" style="width:70%;">
@@ -309,7 +305,7 @@ function buildEditForm($id)
     $rtn.=($gst['guestAgeRange'] == "13-20")? '<option value="13-20" selected>13-20</option>': '<option value="13-20">13-20</option>';
     $rtn.=($gst['guestAgeRange'] == "21-40")? '<option value="21-40" selected>21-40</option>': '<option value="21-40">21-40</option>';
     $rtn.=($gst['guestAgeRange'] == "41-50")? '<option value="41-50" selected>41-50</option>': '<option value="41-50">41-50</option>';
-    $rtn.=($gst['guestAgeRange'] == "50+")? '<option value="50+" selected>50+</option>': '<option value="50+">50+</option></select></div></div></div>';
+    $rtn.=($gst['guestAgeRange'] == "50 and Above")? '<option value="50 and Above" selected>50 and Above</option>': '<option value="50 and Above">50 and Above</option></select></div></div></div>';
 
     $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestPhone">Guest Mobilenumber</label>';
     $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" value="'.$gst['guestPhone'].'" required></div></div>';
@@ -356,7 +352,7 @@ function buildNewForm()
   $rtn.='<option value="yes" selected>Yes</option><option value="no">No</option></select></div></div>';
 
   $rtn.='<div class="col-sm-3"><label for="guestAgeRange">Age Range</label><div class="form-group"><select class="form-control" id="guestAgeRange" name="guestAgeRange">';
-  $rtn.='<option value="13-20">13-20</option><option value="21-40" selected>21-40</option><option value="41-50">41-50</option><option value="50+">50+</option></select></div></div></div>';
+  $rtn.='<option value="13-20">13-20</option><option value="21-40" selected>21-40</option><option value="41-50">41-50</option><option value="50 and Above">50 and Above</option></select></div></div></div>';
   
   $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestPhone">Guest Mobilenumber</label>';
   $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" placeholder="Guest PhoneNumber" required></div></div>';
@@ -415,7 +411,7 @@ function buildPromoteForm($id)
     $rtn.=($gst['guestAgeRange'] == "13-20")? '<option value="13-20" selected>13-20</option>': '<option value="13-20">13-20</option>';
     $rtn.=($gst['guestAgeRange'] == "21-40")? '<option value="21-40" selected>21-40</option>': '<option value="21-40">21-40</option>';
     $rtn.=($gst['guestAgeRange'] == "41-50")? '<option value="41-50" selected>41-50</option>': '<option value="41-50">41-50</option>';
-    $rtn.=($gst['guestAgeRange'] == "50+")? '<option value="50+" selected>50+</option>': '<option value="50+">50+</option></select></div></div></div>';
+    $rtn.=($gst['guestAgeRange'] == "50 and Above")? '<option value="50 and Above" selected>50 and Above</option>': '<option value="50 and Above">50 and Above</option></select></div></div></div>';
 
     $rtn.='<div class="row"><div class="col-sm-4"><div class="form-group"><label for="guestPhone">Guest Mobilenumber</label>';
     $rtn.='<input type="text" class="form-control" name="guestPhone" id="guestPhone" value="'.$gst['guestPhone'].'" readonly></div></div>';
