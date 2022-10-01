@@ -100,7 +100,7 @@ function updateBarChart($sTitle,$sValue)
       $row = $stmt->execute();
 
       if ($row) {
-        $rtn = "The $sTitle has been created!<br>";
+        $rtn = "The $sTitle has been created with entry $sValue!<br>";
       }
     } else {
       $rtn = "Database Error --> ". $db->connectionError();
