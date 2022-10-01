@@ -1,15 +1,14 @@
-<?php include_once('includes/header.php'); ?>
 <?php
-//session_start();
+
 $_SESSION['usersErr']='';
 $errUsers = '';
 if (isset($_REQUEST['saveRec'])) {
   if (canSave()) {
     $errUsers = createNewUser();
-    $_REQUEST['p'] = "update";
+    $_REQUEST['v'] = "update";
   } else {
     $errUsers=$_SESSION['usersErr'];
-    $_REQUEST['p'] = "new";
+    $_REQUEST['v'] = "new";
   }
   
 }
@@ -17,10 +16,10 @@ if (isset($_REQUEST['saveRec'])) {
 if (isset($_POST['updateRec'])) {
   if (canSaveEdit()) {
     $errUsers = UpdateUser();
-    $_REQUEST['p'] = "update";
+    $_REQUEST['v'] = "update";
   }else {
     $errUsers=$_SESSION['usersErr'];
-    $_REQUEST['p'] = "edit";
+    $_REQUEST['v'] = "edit";
   }
   
 }
@@ -28,165 +27,88 @@ if (isset($_POST['updateRec'])) {
 if (isset($_POST['deleteRec'])) {
   // if (canSaveEdit()) {
   //   $errUsers = UpdateUser();
-  //   $_REQUEST['p'] = "update";
+  //   $_REQUEST['v'] = "update";
   // }else {
   //   $errUsers=$_SESSION['usersErr'];
-  //   $_REQUEST['p'] = "edit";
+  //   $_REQUEST['v'] = "edit";
   // }  
 }
 ?>
-<style>
-  #users.tbody th,
-  #users tbody td {
-    height: 5px;
-  }
-</style>
 
-<body class="hold-transition layout-top-nav">
 
-  <div id="app">
-    <div class="wrapper">
-      <?php include('includes/top_menu.php'); ?>
-
-      <div class="content-wrapper">
-        <div class="container">
-          <div class="content-header">
-            <div class="container">
-              <div class="row mb-2">
-                <div class="col-sm-6">
-                  <h1 class="m-0">RCCG Overcomers Cares</h1>
-                  <h3 class="card-title" style="color:cadetblue;"><?php echo userDetails(); ?></h3>
-                </div>
-                <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="home.php">Home</a></li>
-                    <li class="breadcrumb-item acive"> User Accounts </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
+<div class="content">
+  <div class="container-fluid" style="width:60%;">
+    <div class="card card-outline card-primary">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-8">
+            <h5>User Account Management</h5>
+            <?php if ($errUsers != '') { echo '<span style="color:red;font-size:15px;">' . $errUsers . '</span>'; } ?>
           </div>
-
-          <div class="content">
-            <div class="container-fluid" style="width:70%;">
-              <div class="card card-outline card-primary">
-                <div class="card-header">
-                  <div class="row">
-                    <div class="col-sm-8">
-                      <h5>User Account Management</h5>
-                      <?php if ($errUsers != '') { echo '<span style="color:red;font-size:15px;">' . $errUsers . '</span>'; } ?>
-                    </div>
-                    <div class="col-sm-4">
-                      <?php if (isset($_REQUEST['p']) && ($_REQUEST['p'] == 'new' || $_REQUEST['p'] == 'edit' || $_REQUEST['p'] == 'delete')) { ?>
-                        <a href="userAccounts.php" class="btn btn-danger float-right">Back</a>
-                      <?php } else { ?>
-                        <a href="userAccounts.php?p=new" class="btn btn-secondary float-right">Create New User</a>
-                      <?php } ?>
-                    </div>
-                  </div>
-                </div>
-                <?php if (isset($_REQUEST['p']) && $_REQUEST['p'] == 'new') { ?>
-                  <div class="row">
-                    <div class="card-body card-secondary">
-                      <div class="card-header">
-                        <h3 class="card-title">Create New User</h3>
-                      </div>
-                      <form method="post" target="">
-                        <?php echo buildNewForm(); ?>                        
-                      </form>
-                    </div>
-                  </div>
-                <?php } else if (isset($_REQUEST['p']) && $_REQUEST['p'] == 'delete') { ?>
-                  <div class="row">
-                    <div class="card-body card-secondary">
-                      <div class="card-header">
-                        <h3 class="card-title">Disable User</h3>
-                      </div>
-                      <form method="post" target="">
-                        <?php echo buildPromoteForm($_REQUEST['rid']) ?>
-                      </form>
-                    </div>
-                  </div>
-                <?php } else if (isset($_REQUEST['p']) && $_REQUEST['p'] == 'edit') { ?>
-                  <div class="row">
-                    <div class="card-body card-secondary">
-                      <div class="card-header">
-                        <h3 class="card-title">Edit User</h3>
-                      </div>
-                      <form method="post" target="">
-                        <?php echo buildEditForm($_REQUEST['rid']); ?> 
-                      </form>
-                    </div>
-                  </div>
-                <?php } else { ?>
-                  <div class="row">
-                    <div class="card-body">
-                      <table id="users" class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th width="320px">User Fullname</th>
-                            <th width="100px">User Role</th>
-                            <th width="130px">Date Created</th>
-                            <th width="50px">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php echo getAccountRecords(); ?>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                <?php } ?>
-              </div>
-            </div>
+          <div class="col-sm-4">
+            <?php if (isset($_REQUEST['v']) && ($_REQUEST['v'] == 'new' || $_REQUEST['v'] == 'edit' || $_REQUEST['v'] == 'delete')) { ?>
+              <a href="home?p=users" class="btn btn-danger float-right">Back</a>
+            <?php } else { ?>
+              <a href="home?p=users?v=new" class="btn btn-secondary float-right">Create New User</a>
+            <?php } ?>
           </div>
         </div>
-        <!-- </div> -->
       </div>
+      <?php if (isset($_REQUEST['v']) && $_REQUEST['v'] == 'new') { ?>
+        <div class="row">
+          <div class="card-body card-secondary">
+            <div class="card-header">
+              <h3 class="card-title">Create New User</h3>
+            </div>
+            <form method="post" target="">
+              <?php echo buildNewForm(); ?>                        
+            </form>
+          </div>
+        </div>
+      <?php } else if (isset($_REQUEST['v']) && $_REQUEST['v'] == 'delete') { ?>
+        <div class="row">
+          <div class="card-body card-secondary">
+            <div class="card-header">
+              <h3 class="card-title">Disable User</h3>
+            </div>
+            <form method="post" target="">
+              <?php echo buildPromoteForm($_REQUEST['rid']) ?>
+            </form>
+          </div>
+        </div>
+      <?php } else if (isset($_REQUEST['v']) && $_REQUEST['v'] == 'edit') { ?>
+        <div class="row">
+          <div class="card-body card-secondary">
+            <div class="card-header">
+              <h3 class="card-title">Edit User</h3>
+            </div>
+            <form method="post" target="">
+              <?php echo buildEditForm($_REQUEST['rid']); ?> 
+            </form>
+          </div>
+        </div>
+      <?php } else { ?>
+        <div class="row">
+          <div class="card-body">
+            <table id="grids" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th width="320px">User Fullname</th>
+                  <th width="100px">User Role</th>
+                  <th width="130px">Date Created</th>
+                  <th width="50px">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php echo getAccountRecords(); ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <?php } ?>
     </div>
-
-
-    <footer class="main-footer">
-      <div class="float-right d-none d-sm-inline">
-        Powered by <strong>RCCG Overcomers</strong> | Media Unit
-      </div>
-      Copyright &copy <span id="copy"><?php echo date('Y'); ?></span>
-    </footer>
   </div>
-
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/adminlte.min.js"></script>
-
-  <script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
-  <script src="assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-  <script src="assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-  <script src="assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-  <script src="assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-  <script src="assets/plugins/jszip/jszip.min.js"></script>
-  <script src="assets/plugins/pdfmake/pdfmake.min.js"></script>
-  <script src="assets/plugins/pdfmake/vfs_fonts.js"></script>
-  <script src="assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-  <script src="assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-  <script src="assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
-  <script>
-    $(function() {
-      $("#users").DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        //"buttons": ["excel", "pdf", "colvis"]
-      }).buttons().container().appendTo('#users_wrapper .col-md-6:eq(0)');;
-    });
-  </script>
-</body>
-
-</html>
+</div>
 
 
 <?php
@@ -279,11 +201,11 @@ function getAccountRecords()
         $rFN = $row['secFullName'];
         $rCDate = $row['secCreatedDate'];
         $rID = $row['secID'];
-        $rS = $row['secRole'];
+        $rS = $row['secRole']; //users?v=delete&rid=' . $rID . '   users?v=edit&rid=' . $rID . '
         $rtn .= '<tr><td>' . $rFN . '</td><td>' . $rS . '</td><td>' . $rCDate . '</td>'
-            . '<td><span class="badge badge-complete"><a href="userAccounts.php?p=delete&rid=' . $rID . '">'
+            . '<td><span class="badge badge-complete"><a href="">'
             . '<i class="nav-icon fas fa-user-lock" title="Disable User" style="color:red;"></i>'
-            . '</a></span><span class="badge badge-edit"><a href="userAccounts.php?p=edit&rid=' . $rID . '">'
+            . '</a></span><span class="badge badge-edit"><a href="">'
             . '<i class="nav-icon fas fa-edit" title="Edit User" style="color:blue;"></i></a></span></td></tr>';
       }
     } else {
@@ -515,18 +437,6 @@ function canSaveEdit()
 ///--------------------------------------------------
 ///------------ general-purpose functions -----------
 ///--------------------------------------------------
-
-function userDetails()
-{
-  $rtn = '';
-  if (isset($_SESSION['fullname'])) {
-    $rtn = $_SESSION['fullname'] . " (" . $_SESSION['role'] . ")";
-  } else {
-    $rtn = 'No User Details';
-  }
-
-  return $rtn;
-}
 
 function getToday()
 {

@@ -155,7 +155,7 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
                       <div class="col-md-3 col-sm-6 col-12">
                         <div class="small-box bg-info">
                           <div class="inner">
-                            <h3><?php echo number_format(getTotalNumNCS()); ?></h3>
+                            <h3><?php echo getWeekCount(); ?></h3>
                             <p>No. of Guests (This Week)</p>
                           </div>
                           <div class="icon"><i class="fas fa-user-secret"></i></div>
@@ -164,7 +164,7 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
                       <div class="col-md-3 col-sm-6 col-12">
                         <div class="small-box bg-secondary">
                           <div class="inner">
-                            <h3><?php echo number_format(getTotalNumCAC()); ?></h3>
+                            <h3><?php echo getMonthCount(); ?></h3>
                             <p>No. of Guests (This Month)</p>
                           </div>
                           <div class="icon"><i class="fas fa-user-shield"></i></div>
@@ -173,7 +173,7 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
                       <div class="col-md-3 col-sm-6 col-12">
                         <div class="small-box bg-success">
                           <div class="inner">
-                            <h3><?php echo number_format(getTotalNumTPM()); ?></h3>
+                            <h3><?php echo getQuarterCount(); ?></h3>
                             <p>Total No. of Guests (Quarter)</p>
                           </div>
                           <div class="icon"><i class="fas fa-user-tie"></i></div>
@@ -188,6 +188,33 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
                           <div class="icon"><i class="fas fa-user-tie"></i></div>
                         </div>
                       </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6">
+                      <div class="card card-primary card-outline">
+                        <div class="card-header">
+                          <h3 class="card-title">
+                            <i class="far fa-chart-bar"></i>
+                            Guest Statistics for the last four (4) weeks
+                          </h3>
+
+                          <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                              <i class="fas fa-times"></i>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <div id="bar-chart" style="height: 200px;"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <?php //echo $_SESSION['titles']; ?>
+                    </div>
                     </div>
 
                     <!-- <div class="row">
@@ -254,7 +281,9 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
   <script src="assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-  <!-- <script src="assets/js/demo.js"></script> -->
+  <script src="assets/plugins/flot/jquery.flot.js"></script>
+  <script src="assets/plugins/flot/plugins/jquery.flot.resize.js"></script>
+  <script src="assets/plugins/flot/plugins/jquery.flot.pie.js"></script>
 
   <script>
     $(function() {
@@ -320,12 +349,81 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
     });
   </script>
 
+<script>
+  $(function () {
+
+    var bar_data = {
+      data : <?php echo getBarChartData(); ?>,
+      bars: { show: true }
+    }
+    $.plot('#bar-chart', [bar_data], {
+      grid  : {
+        borderWidth: 1,
+        borderColor: '#f3f3f3',
+        tickColor  : '#f3f3f3'
+      },
+      series: {
+         bars: {
+          show: true, barWidth: 0.5, align: 'center',
+        },
+      },
+      colors: ['#3c8dbc'],
+      xaxis : {
+        ticks: <?php echo $_SESSION['titles']; ?>,
+      }
+    })
+  })
+</script>
+
   </body>
 
   </html>
 
 
   <?php
+
+  function getBarChartData()
+  {
+    // $rtn='[[1,10], [2,8], [3,4], [4,13]]';
+    // $rtnTitle='[[1,'January'], [2,'February'], [3,'March'], [4,'April']]';
+    $rtn='[';$cnt=1;$rtnTitle='[';
+    try {
+      $db = new connectDatabase();
+      if ($db->isLastQuerySuccessful()) {
+        $con = $db->connect();
+
+        $sql = "SELECT COUNT(*) FROM bar_chart";
+        $res = $con->query($sql);
+        $r_count = $res->fetchColumn();
+  
+        $sql = "SELECT chtTitle,chtValue FROM bar_chart ORDER BY chtTitle DESC";
+        $stmt = $con->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+        
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        
+        foreach ($stmt->fetchAll() as $row) 
+        {
+          $stmt->rowCount();
+          if ($cnt>1 && $cnt<=$r_count){$rtn.=', ';$rtnTitle.=', ';}
+          $val=$row['chtValue'];
+          $tit=$row['chtTitle'];
+          $rtn.='['.$cnt.','.$val.']';
+          $rtnTitle.="[".$cnt.",'".date('j M Y',strtotime($tit))."']";
+          $cnt++;
+        }
+        $rtn.=']';$rtnTitle.="]";
+      } else {
+        trigger_error($db->connectionError());
+      }
+      $db->closeConnection();
+    } catch (Exception $e) {
+      trigger_error($db->connectionError());
+    }
+    $_SESSION['titles']=$rtnTitle;
+    return $rtn;
+  }
+
   function namePage()
   {
     $rtn = '';
@@ -337,39 +435,87 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
     return $rtn;
   }
 
-  function getTotalNumNCS()
+  function getWeekCount()
   {
-    $cnt = 10;
+    $cnt = 0;
+    try {
+      $db = new connectDatabase();
+      if ($db->isLastQuerySuccessful()) {
+        $con = $db->connect();
+  
+        $sql = "SELECT COUNT(guestID) as cnt FROM guests WHERE guestStatus = 'guest' AND guestVisitDate BETWEEN ".getDateRange('W');
+        $stmt = $con->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+        
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $tmp=$stmt->fetch();
+        $cnt=(int) $tmp['cnt'];
+
+      } else {
+        trigger_error($db->connectionError());
+      }
+      $db->closeConnection();
+    } catch (Exception $e) {
+      trigger_error($db->connectionError());
+    }
     return $cnt;
   }
 
-  function getTotalNumCAC()
+  function getMonthCount()
   {
-    $cnt = 15;
+    $cnt = 0;
+    try {
+      $db = new connectDatabase();
+      if ($db->isLastQuerySuccessful()) {
+        $con = $db->connect();
+  
+        $sql = "SELECT COUNT(guestID) as cnt FROM guests WHERE guestStatus = 'guest' AND guestVisitDate BETWEEN ".getDateRange('M');
+        $stmt = $con->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+        
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $tmp=$stmt->fetch();
+        $cnt=(int) $tmp['cnt'];
+
+      } else {
+        trigger_error($db->connectionError());
+      }
+      $db->closeConnection();
+    } catch (Exception $e) {
+      trigger_error($db->connectionError());
+    }
+    return $cnt;
+  }
+
+  function getQuarterCount()
+  {
+    $cnt = 0;
+    try {
+      $db = new connectDatabase();
+      if ($db->isLastQuerySuccessful()) {
+        $con = $db->connect();
+  
+        $sql = "SELECT COUNT(guestID) as cnt FROM guests WHERE guestStatus = 'guest' AND guestVisitDate BETWEEN ".getDateRange('Q');
+        $stmt = $con->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+        
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $tmp=$stmt->fetch();
+        $cnt=(int) $tmp['cnt'];
+
+      } else {
+        trigger_error($db->connectionError());
+      }
+      $db->closeConnection();
+    } catch (Exception $e) {
+      trigger_error($db->connectionError());
+    }
     return $cnt;
   }
 
   function getTotalNumTPM()
   {
-    $cnt = 15;
-    return  $cnt;
-  }
-
-  function getNCSPer()
-  {
-    $tpm = (float) getTotalNumTPM();
-    $ncs = (float) getTotalNumNCS();
-    return round(($tpm / $ncs) * 100, 2);
-  }
-
-
-  function getCACPer()
-  {
-    $tpm = (float) getTotalNumTPM();
-    $cac = (float) getTotalNumCAC();
-    $val = $tpm / $cac;
-    // trigger_error('the value is '.$cac);
-    return round($val * 100, 2);
+    return 20;
   }
 
   function userDetails()
@@ -417,5 +563,35 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
     }
   }
 
+  function getDateRange($intv)
+  {
+    $rg='';
+    $rge=new DateTime();
+    if ($intv == 'W'){
+      $rgs=new DateTime();      
+      $rgs->modify('-6 days');
+      $rg=" '".$rgs->format('Y-m-d')."' AND '".$rge->format('Y-m-d')."' ";
+    } else if ($intv=='M'){
+      $rg=" '".$rge->format('Y-m')."-01' AND '".$rge->format('Y-m-d')."' ";
+    } else if ($intv=='Q'){
+       $m=$rge->format('m');
+       switch($m)
+       {
+        case 1: case 2: case 3:
+          $rg=" '".$rge->format('Y')."-01-01' AND '".$rge->format('Y')."-03-31' ";
+          break;
+        case 4: case 5: case 6:
+          $rg=" '".$rge->format('Y')."-04-01' AND '".$rge->format('Y')."-06-30' ";
+          break;
+        case 7: case 8: case 9:
+          $rg=" '".$rge->format('Y')."-07-01' AND '".$rge->format('Y')."-09-30' ";
+          break;
+        case 10: case 11: case 12:
+          $rg=" '".$rge->format('Y')."-10-01' AND '".$rge->format('Y')."-12-31' ";
+          break;
+       }
+    }    
+    return $rg;
+  }
 
   ?>

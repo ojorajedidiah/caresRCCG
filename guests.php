@@ -27,7 +27,7 @@ if (isset($_POST['updateRec'])) {
 
 if (isset($_POST['promoteRec'])) {
   // if (canSaveEdit()) {
-  //   $errGuest = UpdateGuest();
+  //   $errGuest = PromoteGuest();
   //   $_REQUEST['v'] = "update";
   // }else {
   //   $errGuest=$_SESSION['guestErr'];
@@ -204,6 +204,11 @@ function UpdateGuest()
   }
 
   return ($rtn == '') ? 'No Guest Data' : $rtn;
+}
+
+function PromoteGuest()
+{
+  
 }
 
 function getAccountRecords()
