@@ -15,13 +15,14 @@ $rg['ch2']['s']=new DateTime();
 $rg['ch1']['e']=new DateTime();
 $rg['ch1']['s']=new DateTime();
 
-$rg['ch4']['s']->modify('-6 days');
-$rg['ch3']['e']->modify('-7 days');
-$rg['ch3']['s']->modify('-13 days');
-$rg['ch2']['e']->modify('-14 days');
-$rg['ch2']['s']->modify('-20 days');
-$rg['ch1']['e']->modify('-21 days');
-$rg['ch1']['s']->modify('-27 days');
+$rg['ch4']['e']->modify('-7 days');
+$rg['ch4']['s']->modify('-13 days');
+$rg['ch3']['e']->modify('-14 days');
+$rg['ch3']['s']->modify('-20 days');
+$rg['ch2']['e']->modify('-21 days');
+$rg['ch2']['s']->modify('-27 days');
+$rg['ch1']['e']->modify('-28 days');
+$rg['ch1']['s']->modify('-34 days');
 
 // echo $rg['ch4']['s']->format('Y-m-d').'<br>';
 // echo $rg['ch4']['e']->format('Y-m-d').'<br>';
@@ -31,6 +32,7 @@ $rg['ch1']['s']->modify('-27 days');
 // echo $rg['ch2']['e']->format('Y-m-d').'<br>';
 // echo $rg['ch1']['s']->format('Y-m-d').'<br>';
 // echo $rg['ch1']['e']->format('Y-m-d').'<br>';
+
 $status=cleanBarChart();
 foreach($rg as $dat)
 {

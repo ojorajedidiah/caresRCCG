@@ -198,14 +198,14 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
                             Guest Statistics for the last four (4) weeks
                           </h3>
 
-                          <div class="card-tools">
+                          <!-- <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                               <i class="fas fa-minus"></i>
                             </button>
                             <button type="button" class="btn btn-tool" data-card-widget="remove">
                               <i class="fas fa-times"></i>
                             </button>
-                          </div>
+                          </div> -->
                         </div>
                         <div class="card-body">
                           <div id="bar-chart" style="height: 200px;"></div>
@@ -380,7 +380,7 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
   </html>
 
 
-  <?php
+<?php
 
   function getBarChartData()
   {
@@ -594,4 +594,4 @@ if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == 1) {
     return $rg;
   }
 
-  ?>
+?>
